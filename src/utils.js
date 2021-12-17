@@ -27,7 +27,7 @@ function extract(string, regexp, errorMessage) {
 }
 
 function isCloudflareJSChallenge(body) {
-  return body.includes('managed_checking_msg');
+  return body.includes('managed_checking_msg') || body.includes('Just a moment...');
 }
 
 function isCloudflareCaptchaChallenge(body) {
