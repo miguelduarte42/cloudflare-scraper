@@ -21,7 +21,7 @@ async function handleError(error) {
   throw error;
 }
 
-function handleResponse(response, options) {
+async function handleResponse(response, options) {
   const { jar, url, uri } = options;
   const targetUrl = uri || url;
   const body = response.body || response;
