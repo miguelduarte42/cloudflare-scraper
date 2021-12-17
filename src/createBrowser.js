@@ -14,11 +14,13 @@ let puppeteerCore;
 try {
   puppeteerCore = require('puppeteer');
 } catch (e) {}
+console.log(e);
 if (!puppeteerCore) {
   try {
     chromium = require('chrome-aws-lambda');
     puppeteerCore = chromium.puppeteer;
   } catch (e) {
+    console.log(e);
     throw new Error(
       'Missing puppeteer dependency (yarn add puppeteer or yarn add puppeteer-core chrome-aws-lambda)'
     );
