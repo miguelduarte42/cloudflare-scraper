@@ -15,8 +15,8 @@ function isCloudflareIUAMError(error) {
 async function handleError(error) {
   if (isCloudflareIUAMError(error)) {
     const { options } = error;
-    await fillCookiesJar(request, options);
-    return request(options);
+    let content = await fillCookiesJar(request, options);
+    return content;
   }
   throw error;
 }
@@ -28,14 +28,20 @@ function handleResponse(response, options) {
   if (isProtectedByStormwall(body)) {
     const cookie = getStormwallCookie(body);
     jar.setCookie(cookie, targetUrl);
-    return request(options);
+    let response = await request(options);
+    return response.body;
   }
-  return response;
+  return body;
 }
 
 async function cloudflareScraper(options) {
-  const response = await request({ ...options }).catch(handleError);
-  return handleResponse(response, options);
+    try {
+        const response = await request({...options});
+        return handleResponse(response, options);
+    } catch (err) {
+        let content = handleError(err);
+        return content;
+    }
 }
 
 const defaultParams = {

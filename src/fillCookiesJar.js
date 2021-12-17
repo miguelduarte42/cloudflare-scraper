@@ -54,6 +54,7 @@ async function fillCookiesJar(request, options) {
     for (let cookie of cookies) {
       jar.setCookie(convertCookieToTough(cookie), url);
     }
+    return content;
   } finally {
     await browser.close();
   }
