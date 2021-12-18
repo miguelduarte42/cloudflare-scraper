@@ -14,7 +14,7 @@ let puppeteerCore;
 try {
   puppeteerCore = require('puppeteer');
 } catch (e) {}
-console.log(e);
+
 if (!puppeteerCore) {
   try {
     chromium = require('chrome-aws-lambda');
