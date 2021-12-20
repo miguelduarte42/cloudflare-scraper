@@ -54,6 +54,11 @@ async function fillCookiesJar(request, options) {
     for (let cookie of cookies) {
       jar.setCookie(convertCookieToTough(cookie), url);
     }
+
+    await page.select('#table-apps_length select', "5000");
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    content = await page.content();
+
     return content;
   } finally {
     await browser.close();
