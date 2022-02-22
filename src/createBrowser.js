@@ -53,7 +53,7 @@ async function createBrowser(options) {
   }
 
   let puppeteerOptions = {
-    headless: PUPPETEER_HEADLESS === 'true',
+    headless: PUPPETEER_HEADLESS === 'false',
     ignoreHTTPSErrors,
     ...userPuppeteerOptions,
     args

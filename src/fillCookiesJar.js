@@ -24,9 +24,10 @@ function convertCookieToTough(cookie) {
 async function fillCookiesJar(request, options) {
     let {jar, url, uri} = options;
     url = url || uri;
+    let browser;
 
-    const browser = await createBrowser(options);
-    try {
+try {
+      browser = await createBrowser(options);
         const page = await browser.newPage();
         let response = await page.goto(url, {
             timeout: 45000,
@@ -38,7 +39,7 @@ async function fillCookiesJar(request, options) {
 
         while (isCloudflareJSChallenge(content)) {
             response = await page.waitForNavigation({
-                timeout: 45000,
+                timeout: 15000,
                 waitUntil: 'domcontentloaded'
             });
             await new Promise((resolve) => setTimeout(resolve, 10000));
@@ -47,17 +48,8 @@ async function fillCookiesJar(request, options) {
                 throw new Error('timeout on just a moment');
             }
         }
-        if (isCloudflareCaptchaChallenge(content)) {
-            await handleCaptcha(content, request, options);
-        }
-
-        const cookies = await page.cookies();
-        for (let cookie of cookies) {
-            jar.setCookie(convertCookieToTough(cookie), url);
-        }
 
         try {
-            await new Promise((resolve) => setTimeout(resolve, 10000));
             content = await page.content();
             await page.select('#table-apps_length select', "5000");
             await new Promise((resolve) => setTimeout(resolve, 10000));
@@ -70,6 +62,7 @@ async function fillCookiesJar(request, options) {
     } catch (err) {
         console.log(err);
     } finally {
+      if(browser)
         await browser.close();
     }
 }
